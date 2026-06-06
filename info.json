@@ -1,0 +1,15 @@
+{
+    "name": "reskins-nullius",
+    "version": "0.1.0",
+    "factorio_version": "2.0",
+    "title": "Artisanal Reskins: Nullius",
+    "author": "Kirazy",
+    "contact": "https://discord.gg/qAvSyzZFPr",
+    "homepage": "https://github.com/kirazy/reskins-nullius",
+    "dependencies": [
+        "nullius",
+        "reskins-assets-angels",
+        "reskins-assets-base",
+        "? lambent-nil"
+    ]
+}
