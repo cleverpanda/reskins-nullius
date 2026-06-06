@@ -1,4 +1,6 @@
-local boiler = require("base/boiler")
+local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+
+local boiler = require("base.boiler")
 
 local tier_map = {
 	["nullius-combustion-chamber-1"] = { tier = 1, prog_tier = 1 },
@@ -7,8 +9,6 @@ local tier_map = {
 }
 
 for name, map in pairs(tier_map) do
-	boiler(
-		name,
-		(reskins.lib.settings.get_value("reskins-lib-tier-mapping") == "progression-map") and map.prog_tier or map.tier
-	)
+	local tier = _framework.tiers.get_tier(map)
+	boiler(name, tier)
 end

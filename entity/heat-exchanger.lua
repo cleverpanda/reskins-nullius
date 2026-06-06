@@ -1,4 +1,6 @@
-local heat_exchanger = require("base/heat-exchanger")
+local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+
+local heat_exchanger = require("base.heat-exchanger")
 
 local tier_map = {
 	["nullius-heat-exchanger-1"] = { tier = 1, prog_tier = 1 },
@@ -7,8 +9,6 @@ local tier_map = {
 }
 
 for name, map in pairs(tier_map) do
-	heat_exchanger(
-		name,
-		(reskins.lib.settings.get_value("reskins-lib-tier-mapping") == "progression-map") and map.prog_tier or map.tier
-	)
+	local tier = _framework.tiers.get_tier(map)
+	heat_exchanger(name, tier)
 end

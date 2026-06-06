@@ -1,3 +1,7 @@
+local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+
+local chemical_plant = require("base.chemical-plant")
+
 local tier_map = {
 	["nullius-chemical-plant-1"] = { tier = 1, prog_tier = 1 },
 	["nullius-chemical-plant-2"] = { tier = 2, prog_tier = 2 },
@@ -5,8 +9,6 @@ local tier_map = {
 }
 
 for name, map in pairs(tier_map) do
-	reskins.lib.apply_skin.chemical_plant(
-		name,
-		(reskins.lib.settings.get_value("reskins-lib-tier-mapping") == "progression-map") and map.prog_tier or map.tier
-	)
+	local tier = _framework.tiers.get_tier(map)
+	chemical_plant(name, tier)
 end

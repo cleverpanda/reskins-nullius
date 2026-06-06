@@ -1,13 +1,5 @@
--- Set input parameters
-local inputs = {
-	type = "assembling-machine",
-	icon_name = "liquefier",
-	base_entity_name = "assembling-machine-1",
-	mod = "angels",
-	particles = { ["big"] = 1, ["medium"] = 2 },
-	group = "refining",
-	make_remnants = false,
-}
+local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+local _lib = require("_lib")
 
 local tier_map = {
 	["nullius-vacuum-chamber-1"] = { tier = 1 },
@@ -17,22 +9,33 @@ local tier_map = {
 
 -- Reskin entities, create and assign extra details
 for name, map in pairs(tier_map) do
+	local tier = _framework.tiers.get_tier(map)
+
+	---@type SetupStandardEntityInputs
+	local inputs = {
+		type = "assembling-machine",
+		icon_name = "liquefier",
+		base_entity_name = "assembling-machine-1",
+		graphics_mod = "assets-angels",
+		particles = { ["big"] = 1, ["medium"] = 2 },
+		make_remnants = false,
+		tint = map.tint or _framework.tiers.get_tint(tier),
+	}
+
 	---@type data.AssemblingMachinePrototype
 	local entity = data.raw[inputs.type][name]
 	if not entity then
 		goto continue
 	end
 
-	local tier = reskins.lib.tiers.get_tier(map)
-	inputs.tint = map.tint or reskins.lib.tiers.get_tint(tier)
-
-	reskins.lib.setup_standard_entity(name, tier, inputs)
+	_lib.setup_standard_entity(name, tier, inputs)
 
 	-- Reskin entities
 	entity.graphics_set.animation = {
 		layers = {
 			-- Base
 			{
+				-- cspell: disable-next-line
 				filename = "__angelsrefininggraphics__/graphics/entity/liquifier/liquifier.png",
 				priority = "extra-high",
 				width = 160,
@@ -44,7 +47,7 @@ for name, map in pairs(tier_map) do
 			},
 			-- Mask
 			{
-				filename = "__reskins-angels__/graphics/entity/refining/liquefier/liquefier-mask.png",
+				filename = "__reskins-assets-angels__/graphics/entity/liquefier/liquefier-mask.png",
 				priority = "extra-high",
 				width = 160,
 				height = 160,
@@ -55,7 +58,7 @@ for name, map in pairs(tier_map) do
 			},
 			-- Highlights
 			{
-				filename = "__reskins-angels__/graphics/entity/refining/liquefier/liquefier-highlights.png",
+				filename = "__reskins-assets-angels__/graphics/entity/liquefier/liquefier-highlights.png",
 				priority = "extra-high",
 				width = 160,
 				height = 160,

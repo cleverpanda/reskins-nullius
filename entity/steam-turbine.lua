@@ -1,3 +1,6 @@
+local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+local _lib = require("_lib")
+
 local turbines = {
 	open = {
 		standard = {
@@ -76,9 +79,9 @@ for closure, modes in pairs(turbines) do
 	for mode, tiers in pairs(modes) do
 		for tier, prototype in pairs(tiers) do
 			if closure == "closed" then
-				prototype.graphics_set = table.deepcopy(turbines.open[mode][tier].graphics_set)
+				prototype.graphics_set = util.copy(turbines.open[mode][tier].graphics_set)
 			elseif tier < 3 then
-				prototype.graphics_set = table.deepcopy(tiers[3].graphics_set)
+				prototype.graphics_set = util.copy(tiers[3].graphics_set)
 			end
 		end
 	end
@@ -88,11 +91,11 @@ for closure, modes in pairs(generators) do
 	for mode, tiers in pairs(modes) do
 		for tier, prototype in pairs(tiers) do
 			if closure == "closed" then
-				prototype.vertical_animation = table.deepcopy(generators.open[mode][tier].vertical_animation)
-				prototype.horizontal_animation = table.deepcopy(generators.open[mode][tier].horizontal_animation)
+				prototype.vertical_animation = util.copy(generators.open[mode][tier].vertical_animation)
+				prototype.horizontal_animation = util.copy(generators.open[mode][tier].horizontal_animation)
 			elseif tier < 3 then
-				prototype.vertical_animation = table.deepcopy(tiers[3].vertical_animation)
-				prototype.horizontal_animation = table.deepcopy(tiers[3].horizontal_animation)
+				prototype.vertical_animation = util.copy(tiers[3].vertical_animation)
+				prototype.horizontal_animation = util.copy(tiers[3].horizontal_animation)
 			end
 		end
 	end
@@ -105,7 +108,7 @@ for closure, modes in pairs(turbines) do
 			if closure == "closed" then
 				color_tier = color_tier + 3
 			end
-			local tint = reskins.lib.tiers.get_tint(color_tier)
+			local tint = _framework.tiers.get_tint(color_tier)
 
 			for direction, animation in pairs(prototype.graphics_set.idle_animation) do
 				animation.layers[1].tint = nil
@@ -167,13 +170,13 @@ for closure, modes in pairs(generators) do
 			prototype.horizontal_animation.layers[1].tint = nil
 
 			prototype.vertical_animation.layers[3] =
-				table.deepcopy(turbines[closure][mode][tier].graphics_set.idle_animation.north.layers[3])
+				util.copy(turbines[closure][mode][tier].graphics_set.idle_animation.north.layers[3])
 			prototype.vertical_animation.layers[4] =
-				table.deepcopy(turbines[closure][mode][tier].graphics_set.idle_animation.north.layers[4])
+				util.copy(turbines[closure][mode][tier].graphics_set.idle_animation.north.layers[4])
 			prototype.horizontal_animation.layers[3] =
-				table.deepcopy(turbines[closure][mode][tier].graphics_set.idle_animation.east.layers[3])
+				util.copy(turbines[closure][mode][tier].graphics_set.idle_animation.east.layers[3])
 			prototype.horizontal_animation.layers[4] =
-				table.deepcopy(turbines[closure][mode][tier].graphics_set.idle_animation.east.layers[4])
+				util.copy(turbines[closure][mode][tier].graphics_set.idle_animation.east.layers[4])
 
 			prototype.vertical_animation.layers[3].repeat_count = 8
 			prototype.vertical_animation.layers[4].repeat_count = 8
@@ -203,12 +206,11 @@ local inputs = {
 	type = "furnace",
 	icon_name = "steam-turbine",
 	icon_filename = "__base__/graphics/icons/steam-turbine.png",
-	mod = "lib",
-	group = "base",
+	graphics_mod = "assets-base",
 }
 
 -- Setup defaults.
-reskins.lib.set_inputs_defaults(inputs)
+_lib.set_inputs_defaults(inputs)
 
 local tier_map = {
 	["nullius-turbine-open-1"] = { tier = 1, prog_tier = 1 },
@@ -238,13 +240,8 @@ local tier_map = {
 }
 
 for name, map in pairs(tier_map) do
-	local tier = reskins.lib.tiers.get_tier(map)
-	inputs.tint = map.tint or reskins.lib.tiers.get_tint(tier)
+	local tier = _framework.tiers.get_tier(map)
+	inputs.tint = map.tint or _framework.tiers.get_tint(tier)
 
-	reskins.lib.construct_icon(name, tier, inputs)
-
-	local item = data.raw.item[name]
-	if item then
-		item.icons[3].tint = util.get_color_with_alpha(reskins.lib.tiers.get_tint(map.prog_tier), 0.75)
-	end
+	_lib.construct_icon(name, tier, inputs)
 end

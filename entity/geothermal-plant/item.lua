@@ -1,14 +1,5 @@
--- Set input parameters
-local inputs = {
-	type = "mining-drill",
-	icon_name = "chemical-furnace",
-	base_entity_name = "oil-refinery",
-	mod = "angels",
-	particles = { ["big-tint"] = 5, ["medium"] = 2 },
-	group = "smelting",
-	make_explosions = false,
-	make_remnants = false,
-}
+local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+local _lib = require("_lib")
 
 local tier_map = {
 	["nullius-geothermal-plant-1"] = { tier = 1, prog_tier = 1 },
@@ -18,8 +9,19 @@ local tier_map = {
 
 -- Reskin entities, create and assign extra details
 for name, map in pairs(tier_map) do
-	local tier = reskins.lib.tiers.get_tier(map)
-	inputs.tint = map.tint or reskins.lib.tiers.get_tint(tier)
+	local tier = _framework.tiers.get_tier(map)
 
-	reskins.lib.setup_standard_entity(name, tier, inputs)
+	---@type SetupStandardEntityInputs
+	local inputs = {
+		type = "mining-drill",
+		icon_name = "chemical-furnace",
+		base_entity_name = "oil-refinery",
+		graphics_mod = "assets-angels",
+		particles = { ["big-tint"] = 5, ["medium"] = 2 },
+		make_explosions = false,
+		make_remnants = false,
+		tint = map.tint or _framework.tiers.get_tint(tier),
+	}
+
+	_lib.setup_standard_entity(name, tier, inputs)
 end

@@ -1,13 +1,15 @@
+local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+local _lib = require("_lib")
+
 ---@type ConstructIconInputsOld
 local inputs = {
 	type = "assembling-machine",
 	icon_name = "thermal-extractor",
-	mod = "angels",
-	group = "refining",
+	graphics_mod = "assets-angels",
 }
 
 -- Setup defaults.
-reskins.lib.set_inputs_defaults(inputs)
+_lib.set_inputs_defaults(inputs)
 
 local tier_map = {
 	["nullius-compressor-1"] = { tier = 1, prog_tier = 1 },
@@ -16,8 +18,8 @@ local tier_map = {
 }
 
 for name, map in pairs(tier_map) do
-	local tier = reskins.lib.tiers.get_tier(map)
-	inputs.tint = map.tint or reskins.lib.tiers.get_tint(tier)
+	local tier = _framework.tiers.get_tier(map)
+	inputs.tint = map.tint or _framework.tiers.get_tint(tier)
 
-	reskins.lib.construct_icon(name, tier, inputs)
+	_lib.construct_icon(name, tier, inputs)
 end

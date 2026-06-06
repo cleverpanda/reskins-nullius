@@ -1,13 +1,5 @@
--- Set input parameters
-local inputs = {
-	type = "assembling-machine",
-	icon_name = "casting-machine",
-	base_entity_name = "chemical-plant",
-	mod = "angels",
-	particles = { ["big"] = 1, ["medium"] = 2 },
-	group = "smelting",
-	make_remnants = false,
-}
+local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+local _lib = require("_lib")
 
 local tier_map = {
 	["nullius-foundry-1"] = { tier = 1 },
@@ -17,7 +9,7 @@ local tier_map = {
 
 ---@param is_flipped boolean?
 ---@return data.WorkingVisualisation
-local function get_color_mask_working_visualisation(is_flipped)
+local function get_color_mask_working_visualisation(is_flipped, tint)
 	local flipped = is_flipped == true and "-flipped" or ""
 
 	local working_vis = {
@@ -30,7 +22,7 @@ local function get_color_mask_working_visualisation(is_flipped)
 						priority = "high",
 						frame_count = 49,
 						animation_speed = 0.5,
-						tint = inputs.tint,
+						tint = tint,
 						scale = 0.5,
 					}
 				),
@@ -53,26 +45,38 @@ end
 
 -- Reskin entities, create and assign extra details
 for name, map in pairs(tier_map) do
+	local tier = _framework.tiers.get_tier(map)
+
+	---@type SetupStandardEntityInputs
+	local inputs = {
+		type = "assembling-machine",
+		icon_name = "casting-machine",
+		base_entity_name = "chemical-plant",
+		graphics_mod = "assets-angels",
+		particles = { ["big"] = 1, ["medium"] = 2 },
+		make_remnants = false,
+		tint = map.tint or _framework.tiers.get_tint(tier),
+	}
+
 	---@type data.AssemblingMachinePrototype
 	local entity = data.raw[inputs.type][name]
 	if not entity then
 		goto continue
 	end
 
-	local tier = reskins.lib.tiers.get_tier(map)
-	inputs.tint = map.tint or reskins.lib.tiers.get_tint(tier)
-
-	reskins.lib.setup_standard_entity(name, tier, inputs)
+	_lib.setup_standard_entity(name, tier, inputs)
 
 	entity.graphics_set.animation.layers[1].tint = nil
 	entity.graphics_set_flipped.animation.layers[1].tint = nil
 
 	if entity.graphics_set and entity.graphics_set.working_visualisations then
-		table.insert(entity.graphics_set.working_visualisations, get_color_mask_working_visualisation())
+		local working_vis = get_color_mask_working_visualisation(false, inputs.tint)
+		table.insert(entity.graphics_set.working_visualisations, working_vis)
 	end
 
 	if entity.graphics_set_flipped and entity.graphics_set_flipped.working_visualisations then
-		table.insert(entity.graphics_set_flipped.working_visualisations, get_color_mask_working_visualisation(true))
+		local flipped_working_vis = get_color_mask_working_visualisation(true, inputs.tint)
+		table.insert(entity.graphics_set_flipped.working_visualisations, flipped_working_vis)
 	end
 
 	::continue::

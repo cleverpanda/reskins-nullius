@@ -1,3 +1,6 @@
+local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+local _lib = require("_lib")
+
 ---@param tint data.Color
 ---@return table animation # [Types/Animation4Way](https://wiki.factorio.com/Types/Animation4Way)
 local function entity_animation(tint)
@@ -214,13 +217,11 @@ return function(name, tier, tint, make_tier_labels)
 	local inputs = {
 		type = "assembling-machine",
 		icon_name = "heat-exchanger",
-		icon_filename = "__base__/graphics/icons/heat-boiler.png",
 		base_entity_name = "heat-exchanger",
-		mod = "lib",
-		group = "base",
+		graphics_mod = "assets-base",
 		particles = { ["big"] = 2, ["medium"] = 1 },
 		tier_labels = make_tier_labels,
-		tint = tint and tint or reskins.lib.tiers.get_tint(tier),
+		tint = tint and tint or _framework.tiers.get_tint(tier),
 	}
 
 	---@type data.AssemblingMachinePrototype
@@ -229,7 +230,7 @@ return function(name, tier, tint, make_tier_labels)
 		return
 	end
 
-	reskins.lib.setup_standard_entity(name, tier, inputs)
+	_lib.setup_standard_entity(name, tier, inputs)
 
 	-- Fetch corpse
 	local corpse = data.raw["corpse"][name .. "-remnants"]

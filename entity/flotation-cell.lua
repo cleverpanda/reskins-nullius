@@ -1,13 +1,6 @@
--- Set input parameters
-local inputs = {
-	type = "assembling-machine",
-	icon_name = "ore-flotation-cell",
-	base_entity_name = "assembling-machine-1",
-	mod = "angels",
-	particles = { ["big"] = 1, ["medium"] = 2 },
-	group = "refining",
-	make_remnants = false,
-}
+local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+local _lib = require("_lib")
+local _sprites = require("__reskins-sprite-utils__.sprites")
 
 local tier_map = {
 	["nullius-flotation-cell-1"] = { tier = 1, prog_tier = 1 },
@@ -17,22 +10,32 @@ local tier_map = {
 
 -- Reskin entities, create and assign extra details
 for name, map in pairs(tier_map) do
+	local tier = _framework.tiers.get_tier(map)
+
+	---@type SetupStandardEntityInputs
+	local inputs = {
+		type = "assembling-machine",
+		icon_name = "ore-flotation-cell",
+		base_entity_name = "assembling-machine-1",
+		graphics_mod = "assets-angels",
+		particles = { ["big"] = 1, ["medium"] = 2 },
+		make_remnants = false,
+		tint = map.tint or _framework.tiers.get_tint(tier),
+	}
+
 	---@type data.AssemblingMachinePrototype
 	local entity = data.raw[inputs.type][name]
 	if not entity then
 		goto continue
 	end
 
-	local tier = reskins.lib.tiers.get_tier(map)
-	inputs.tint = map.tint or reskins.lib.tiers.get_tint(tier)
-
-	reskins.lib.setup_standard_entity(name, tier, inputs)
+	_lib.setup_standard_entity(name, tier, inputs)
 
 	entity.graphics_set.animation.layers[1].tint = nil
 
 	entity.graphics_set.working_visualisations = {
 		-- Idle animation
-		scale_image({
+		_sprites.get_rescaled_prototype({
 			always_draw = true,
 			animation = {
 				filename = "__angelsrefininggraphics__/graphics/entity/ore-floatation-cell/ore-flotation-cell-animation-idle.png",
@@ -47,7 +50,7 @@ for name, map in pairs(tier_map) do
 		}, 0.81),
 
 		-- Animation
-		scale_image({
+		_sprites.get_rescaled_prototype({
 			fadeout = true,
 			animation = {
 				filename = "__angelsrefininggraphics__/graphics/entity/ore-floatation-cell/ore-flotation-cell-animation-base.png",
@@ -62,7 +65,7 @@ for name, map in pairs(tier_map) do
 		}, 0.81),
 
 		-- Water recipe mask
-		scale_image({
+		_sprites.get_rescaled_prototype({
 			fadeout = true,
 			apply_recipe_tint = "primary",
 			animation = {
@@ -78,7 +81,7 @@ for name, map in pairs(tier_map) do
 		}, 0.81),
 
 		-- Froth recipe mask
-		scale_image({
+		_sprites.get_rescaled_prototype({
 			fadeout = true,
 			apply_recipe_tint = "secondary",
 			animation = {
@@ -99,7 +102,7 @@ for name, map in pairs(tier_map) do
 			animation = {
 				layers = {
 					-- Mask
-					scale_image({
+					_sprites.get_rescaled_prototype({
 						filename = "__reskins-assets-angels__/graphics/entity/ore-flotation-cell/ore-flotation-cell-mask.png",
 						priority = "extra-high",
 						width = 333,
@@ -109,7 +112,7 @@ for name, map in pairs(tier_map) do
 						scale = 0.5,
 					}, 0.81),
 					-- Highlights
-					scale_image({
+					_sprites.get_rescaled_prototype({
 						filename = "__reskins-assets-angels__/graphics/entity/ore-flotation-cell/ore-flotation-cell-highlights.png",
 						priority = "extra-high",
 						width = 333,

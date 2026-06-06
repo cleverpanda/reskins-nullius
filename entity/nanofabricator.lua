@@ -1,13 +1,6 @@
--- Set input parameters
-local inputs = {
-	type = "assembling-machine",
-	icon_name = "crystallizer",
-	base_entity_name = "assembling-machine-1",
-	mod = "angels",
-	particles = { ["big"] = 1, ["medium"] = 2 },
-	group = "refining",
-	make_remnants = false,
-}
+local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+local _lib = require("_lib")
+local _sprites = require("__reskins-sprite-utils__.sprites")
 
 local tier_map = {
 	["nullius-nanofabricator-1"] = { tier = 1, prog_tier = 1 },
@@ -17,22 +10,32 @@ local tier_map = {
 
 -- Reskin entities, create and assign extra details
 for name, map in pairs(tier_map) do
+	local tier = _framework.tiers.get_tier(map)
+
+	---@type SetupStandardEntityInputs
+	local inputs = {
+		type = "assembling-machine",
+		icon_name = "crystallizer",
+		base_entity_name = "assembling-machine-1",
+		graphics_mod = "assets-angels",
+		particles = { ["big"] = 1, ["medium"] = 2 },
+		make_remnants = false,
+		tint = map.tint or _framework.tiers.get_tint(tier),
+	}
+
 	---@type data.AssemblingMachinePrototype
 	local entity = data.raw[inputs.type][name]
 	if not entity then
 		goto continue
 	end
 
-	local tier = reskins.lib.tiers.get_tier(map)
-	inputs.tint = map.tint or reskins.lib.tiers.get_tint(tier)
-
-	reskins.lib.setup_standard_entity(name, tier, inputs)
+	_lib.setup_standard_entity(name, tier, inputs)
 
 	-- Reskin entities
 	entity.graphics_set.animation = {
 		layers = {
 			-- Base
-			scale_image({
+			_sprites.get_rescaled_prototype({
 				filename = "__angelsrefininggraphics__/graphics/entity/crystallizer/crystallizer.png",
 				priority = "extra-high",
 				width = 390,
@@ -41,7 +44,7 @@ for name, map in pairs(tier_map) do
 				scale = 0.5,
 			}, 0.775),
 			-- Mask
-			scale_image({
+			_sprites.get_rescaled_prototype({
 				filename = "__reskins-assets-angels__/graphics/entity/crystallizer/crystallizer-mask.png",
 				priority = "extra-high",
 				width = 390,
@@ -51,7 +54,7 @@ for name, map in pairs(tier_map) do
 				scale = 0.5,
 			}, 0.775),
 			-- Highlights
-			scale_image({
+			_sprites.get_rescaled_prototype({
 				filename = "__reskins-assets-angels__/graphics/entity/crystallizer/crystallizer-highlights.png",
 				priority = "extra-high",
 				width = 390,
@@ -61,7 +64,7 @@ for name, map in pairs(tier_map) do
 				scale = 0.5,
 			}, 0.775),
 			-- Shadow
-			scale_image({
+			_sprites.get_rescaled_prototype({
 				filename = "__angelsrefininggraphics__/graphics/entity/crystallizer/crystallizer-shadow.png",
 				priority = "extra-high",
 				width = 390,

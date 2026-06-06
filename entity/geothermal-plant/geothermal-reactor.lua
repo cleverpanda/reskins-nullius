@@ -1,13 +1,7 @@
--- Set input parameters
-local inputs = {
-	type = "reactor",
-	icon_name = "chemical-furnace",
-	base_entity_name = "oil-refinery",
-	mod = "angels",
-	particles = { ["big-tint"] = 5, ["medium"] = 2 },
-	group = "smelting",
-	make_remnants = false,
-}
+local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+local _lib = require("_lib")
+
+---@type SetupStandardEntityInputs
 
 local tier_map = {
 	["nullius-geothermal-reactor-1"] = { tier = 1, prog_tier = 1 },
@@ -17,16 +11,26 @@ local tier_map = {
 
 -- Reskin entities, create and assign extra details
 for name, map in pairs(tier_map) do
+	local tier = _framework.tiers.get_tier(map)
+
+	---@type SetupStandardEntityInputs
+	local inputs = {
+		type = "reactor",
+		icon_name = "chemical-furnace",
+		base_entity_name = "oil-refinery",
+		graphics_mod = "assets-angels",
+		particles = { ["big-tint"] = 5, ["medium"] = 2 },
+		make_remnants = false,
+		tint = map.tint or _framework.tiers.get_tint(tier),
+	}
+
 	---@type data.ReactorPrototype
 	local entity = data.raw[inputs.type][name]
 	if not entity then
 		goto continue
 	end
 
-	local tier = reskins.lib.tiers.get_tier(map)
-	inputs.tint = map.tint or reskins.lib.tiers.get_tint(tier)
-
-	reskins.lib.setup_standard_entity(name, tier, inputs)
+	_lib.setup_standard_entity(name, tier, inputs)
 
 	-- Reskin entities
 	entity.working_light_picture = {
