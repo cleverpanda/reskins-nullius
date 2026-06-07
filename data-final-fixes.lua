@@ -1,1 +1,1 @@
-require("entity.pipes")
+require("prototypes.entities.pipes")
