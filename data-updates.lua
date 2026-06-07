@@ -1,5 +1,8 @@
 require("prototypes.entities.splitters")
 require("prototypes.entities.transport-belts")
 require("prototypes.entities.underground-belts")
+require("prototypes.entities.locomotives")
+require("prototypes.entities.cargo-wagons")
+require("prototypes.entities.fluid-wagons")
 require("prototypes.entities.construction-robots")
 require("prototypes.entities.logistic-robots")

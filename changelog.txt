@@ -4,6 +4,7 @@ Date: ????
   Features:
     - Added tier labels to transport belts, underground belts, and splitters.
     - Added support for construction and logistics robots.
+    - Added preliminary support for locomotives, cargo wagons, and fluid wagons.
   Bugfixes:
     - Fixed wrong blend mode on stirling engines.
 ---------------------------------------------------------------------------------------------------
