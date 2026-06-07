@@ -15,5 +15,8 @@
         "reskins-assets-bobs",
         "reskins-assets-assorted",
         "? lambent-nil"
-    ]
+    ],
+    "package": {
+        "git_publish_branch": "main"
+    }
 }
