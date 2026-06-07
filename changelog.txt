@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.1
-Date: ????
+Date: 2026-06-07
   Features:
     - Added tier labels to transport belts, underground belts, and splitters.
     - Added support for construction and logistics robots.
