@@ -9,7 +9,6 @@ local sprite_utils = {
 }
 
 local _framework = {
-	icons = require("__reskins-framework__.api.icons"),
 	tiers = require("__reskins-framework__.api.tiers"),
 }
 
