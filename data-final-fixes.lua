@@ -1,1 +1,9 @@
-require("entity.pipes")
+require("prototypes.entities.pipes")
+require("prototypes.entities.pumps")
+require("prototypes.entities.pylons")
+require("prototypes.entities.sensor-nodes")
+require("prototypes.entities.substations")
+require("prototypes.entities.storage-tanks")
+
+-- After all entity updates.
+require("prototypes.items.broken")

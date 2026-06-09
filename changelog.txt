@@ -1,7 +1,34 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.1.1
+Version: 0.1.3
 Date: ????
   Changes:
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2026-06-08
+  Features:
+    - Added support for inserters, bulk inserters.
+    - Added initial support for grid batteries.
+    - Added support for solar panel structures.
+    - Added support for sensor nodes.
+    - Added support for storage tanks.
+    - Added support for pylons and substations.
+    - Added support for broken items and recipes.
+  Changes:
+    - Open/Closed turbine icons are now tinted to match their assigned tier.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2026-06-07
+  Features:
+    - Added tier labels to transport belts, underground belts, and splitters.
+    - Added support for construction and logistics robots.
+    - Added preliminary support for locomotives, cargo wagons, and fluid wagons.
+    - Added support for the 1x2 fluid pumps / valves.
+    - Added support for assembling machines.
+  Changes:
+    - Revised pipe and underground pipes; now using iron (base), aluminum (white), plastic (blue) and nitinol (dark gray) material sets.
+    - Revised default tier color sequence to be yellow -> red -> blue -> green -> purple -> orange, swapping green with purple to match more conventional color sequences in Nullius.
+  Bugfixes:
+    - Fixed wrong blend mode on stirling engines.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.0
 Date: 2026-06-06

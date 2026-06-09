@@ -1,3 +1,4 @@
+local _sprites = require("__reskins-sprite-utils__.sprites")
 local _framework = { tiers = require("__reskins-framework__.api.tiers") }
 local _lib = require("_lib")
 
@@ -205,7 +206,7 @@ local function corpse_animation(tint)
 		},
 	}
 
-	return make_rotated_animation_variations_from_sheet(1, animation)
+	return _sprites.make_rotated_animation_variations_from_spritesheet(1, animation)
 end
 
 ---@param name string # [Prototype name](https://wiki.factorio.com/PrototypeBase#name)
@@ -234,7 +235,7 @@ return function(name, tier, tint, make_tier_labels)
 	_lib.setup_standard_entity(name, tier, inputs)
 
 	-- Fetch corpse
-	local corpse = data.raw["corpse"][name .. "-remnants"]
+	local corpse = data.raw["corpse"][entity.corpse]
 
 	-- Reskin corpse
 	corpse.animation = corpse_animation(inputs.tint)

@@ -1,5 +1,4 @@
-local _framework = { tiers = require("__reskins-framework__.api.tiers") }
-
+local _sprites = require("__reskins-sprite-utils__.sprites")
 local _framework = { tiers = require("__reskins-framework__.api.tiers") }
 local _lib = require("_lib")
 
@@ -29,7 +28,7 @@ local function entity_picture(tint)
 					width = 225,
 					height = 391,
 					shift = util.by_pixel(4.75, -6.25),
-					"additive-soft",
+					blend_mode = "additive-soft",
 					scale = 0.475,
 				},
 			},
@@ -56,7 +55,7 @@ local function entity_picture(tint)
 					width = 352,
 					height = 257,
 					shift = util.by_pixel(1, -4.75),
-					"additive-soft",
+					blend_mode = "additive-soft",
 					scale = 0.475,
 				},
 			},
@@ -83,7 +82,7 @@ local function entity_picture(tint)
 					width = 225,
 					height = 391,
 					shift = util.by_pixel(4.75, -6.25),
-					"additive-soft",
+					blend_mode = "additive-soft",
 					scale = 0.475,
 				},
 			},
@@ -110,7 +109,7 @@ local function entity_picture(tint)
 					width = 352,
 					height = 257,
 					shift = util.by_pixel(1, -4.75),
-					"additive-soft",
+					blend_mode = "additive-soft",
 					scale = 0.475,
 				},
 			},
@@ -276,7 +275,7 @@ local function corpse_animation(tint)
 		},
 	}
 
-	return make_rotated_animation_variations_from_sheet(1, animation)
+	return _sprites.make_rotated_animation_variations_from_spritesheet(1, animation)
 end
 
 local tier_map = {
@@ -295,7 +294,7 @@ for name, map in pairs(tier_map) do
 		base_entity_name = "steam-engine",
 		graphics_mod = "assets-base",
 		particles = { ["big"] = 2, ["medium"] = 1 },
-		tint = tint and tint or _framework.tiers.get_tint(tier),
+		tint = _framework.tiers.get_tint(tier),
 	}
 
 	---@type data.ElectricEnergyInterfacePrototype
@@ -307,7 +306,7 @@ for name, map in pairs(tier_map) do
 	_lib.setup_standard_entity(name, tier, inputs)
 
 	-- Fetch corpse
-	local corpse = data.raw["corpse"][name .. "-remnants"]
+	local corpse = data.raw["corpse"][entity.corpse]
 
 	-- Reskin corpse
 	corpse.animation = corpse_animation(inputs.tint)
