@@ -6,6 +6,6 @@ require("prototypes.entities.substations")
 require("prototypes.entities.storage-tanks")
 require("prototypes.entities.inserters")
 require("prototypes.entities.inserters-bulk")
-
+require("prototypes.technology")
 -- After all entity updates.
 require("prototypes.items.broken")
