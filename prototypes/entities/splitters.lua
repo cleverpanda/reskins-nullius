@@ -1,4 +1,5 @@
 local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+local _lib = require("_lib")
 
 local entities = {
 	["splitter"] = { type = "splitter", tier = 1, prog_tier = 1 },
@@ -14,7 +15,7 @@ for name, options in pairs(entities) do
 	end
 
 	local tier = _framework.tiers.get_tier(options)
-	_framework.tiers.add_tier_labels_to_prototype(tier, entity)
+	_lib.add_tier_labels_to_prototype(tier, entity)
 
 	::continue::
 end

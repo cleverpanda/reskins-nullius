@@ -1,4 +1,5 @@
 local _framework = { tiers = require("__reskins-framework__.api.tiers") }
+local _lib = require("_lib")
 local _assets = {
 	defines = require("__reskins-assets-api__.api.defines"),
 	icons = require("__reskins-assets-api__.api.icons"),
@@ -25,7 +26,7 @@ for name, options in pairs(entities) do
 	local deferrable_icon = {
 		name = name,
 		type_name = entity.type,
-		icon_data = _framework.tiers.add_tier_labels_to_icons(tier, icon),
+		icon_data = _lib.add_tier_labels_to_icons(tier, icon),
 	}
 
 	_assets.icons.assign_deferrable_icon(deferrable_icon)

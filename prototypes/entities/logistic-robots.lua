@@ -9,10 +9,10 @@ local _assets = {
 local RobotLogisticGraphicsPack = require("__reskins-assets-api__.graphics-packs.base.robot-logistic-graphics-pack")
 
 local entities = {
-	["nullius-logistic-bot-1"] = { type = "logistic-robot", tier = 1, prog_tier = 1 },
-	["nullius-logistic-bot-2"] = { type = "logistic-robot", tier = 2, prog_tier = 2 },
-	["nullius-logistic-bot-3"] = { type = "logistic-robot", tier = 3, prog_tier = 3 },
-	["nullius-logistic-bot-4"] = { type = "logistic-robot", tier = 4, prog_tier = 4 },
+	["nullius-logistic-bot-1"] = { type = "logistic-robot", tier = 1, prog_tier = 2 },
+	["nullius-logistic-bot-2"] = { type = "logistic-robot", tier = 2, prog_tier = 3 },
+	["nullius-logistic-bot-3"] = { type = "logistic-robot", tier = 3, prog_tier = 4 },
+	["nullius-logistic-bot-4"] = { type = "logistic-robot", tier = 4, prog_tier = 5 },
 }
 
 for name, options in pairs(entities) do
@@ -52,7 +52,7 @@ for name, options in pairs(entities) do
 	local deferrable_icon = {
 		name = name,
 		type_name = options.type,
-		icon_data = _framework.tiers.add_tier_labels_to_icons(tier, icon),
+		icon_data = _lib.add_tier_labels_to_icons(tier, icon),
 	}
 
 	_assets.icons.assign_deferrable_icon(deferrable_icon)

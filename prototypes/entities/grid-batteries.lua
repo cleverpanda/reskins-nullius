@@ -11,8 +11,8 @@ local AccumulatorGraphicsPack = require("__reskins-assets-api__.graphics-packs.b
 
 local entities = {
 	["nullius-grid-battery-1"] = { type = "accumulator", tier = 1, prog_tier = 1, scale_factor = 3 / 2 },
-	["nullius-grid-battery-2"] = { type = "accumulator", tier = 2, prog_tier = 2, scale_factor = 3 / 2 },
-	["nullius-grid-battery-3"] = { type = "accumulator", tier = 3, prog_tier = 3, scale_factor = 3 / 2 },
+	["nullius-grid-battery-2"] = { type = "accumulator", tier = 2, prog_tier = 3, scale_factor = 3 / 2 },
+	["nullius-grid-battery-3"] = { type = "accumulator", tier = 3, prog_tier = 4, scale_factor = 3 / 2 },
 }
 
 for name, options in pairs(entities) do
@@ -54,7 +54,7 @@ for name, options in pairs(entities) do
 	local deferrable_icon = {
 		name = name,
 		type_name = options.type,
-		icon_data = _framework.tiers.add_tier_labels_to_icons(tier, icon),
+		icon_data = _lib.add_tier_labels_to_icons(tier, icon),
 	}
 
 	_assets.icons.assign_deferrable_icon(deferrable_icon)

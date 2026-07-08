@@ -2,9 +2,33 @@ local _sprites = require("__reskins-sprite-utils__.sprites")
 local _framework = { tiers = require("__reskins-framework__.api.tiers") }
 local _lib = require("_lib")
 
+local function pipe_overlay(material, direction, width, height, shift)
+	if material == "base" then
+		return {
+			filename = "__core__/graphics/empty.png",
+			priority = "extra-high",
+			width = 1,
+			height = 1,
+		}
+	end
+
+	return {
+		filename = "__reskins-assets-bobs__/graphics/entity/heat-exchanger/heat-pipes/"
+			.. material
+			.. "/heat-pipe-"
+			.. direction
+			.. "-idle.png",
+		priority = "extra-high",
+		width = width,
+		height = height,
+		shift = shift,
+		scale = 0.5,
+	}
+end
+
 ---@param tint data.Color
 ---@return table animation # [Types/Animation4Way](https://wiki.factorio.com/Types/Animation4Way)
-local function entity_animation(tint)
+local function entity_animation(tint, material)
 	return {
 		north = {
 			layers = {
@@ -34,6 +58,7 @@ local function entity_animation(tint)
 					blend_mode = "additive-soft",
 					scale = 0.5,
 				},
+				pipe_overlay(material, "north", 269, 221, util.by_pixel(-1.25, 5.25)),
 				{
 					filename = "__base__/graphics/entity/boiler/boiler-N-shadow.png",
 					priority = "extra-high",
@@ -73,6 +98,7 @@ local function entity_animation(tint)
 					blend_mode = "additive-soft",
 					scale = 0.5,
 				},
+				pipe_overlay(material, "east", 211, 301, util.by_pixel(-1.75, 1.25)),
 				{
 					filename = "__base__/graphics/entity/boiler/boiler-E-shadow.png",
 					priority = "extra-high",
@@ -112,6 +138,7 @@ local function entity_animation(tint)
 					blend_mode = "additive-soft",
 					scale = 0.5,
 				},
+				pipe_overlay(material, "south", 260, 201, util.by_pixel(4, 10.75)),
 				{
 					filename = "__base__/graphics/entity/boiler/boiler-S-shadow.png",
 					priority = "extra-high",
@@ -151,6 +178,7 @@ local function entity_animation(tint)
 					blend_mode = "additive-soft",
 					scale = 0.5,
 				},
+				pipe_overlay(material, "west", 196, 273, util.by_pixel(1.5, 7.75)),
 				{
 					filename = "__base__/graphics/entity/boiler/boiler-W-shadow.png",
 					priority = "extra-high",
@@ -167,7 +195,7 @@ end
 
 ---@param tint data.Color
 ---@return data.RotatedAnimationVariations
-local function corpse_animation(tint)
+local function corpse_animation(tint, material)
 	---@type data.RotatedAnimation
 	local animation = {
 		layers = {
@@ -206,6 +234,20 @@ local function corpse_animation(tint)
 		},
 	}
 
+	if material ~= "base" then
+		table.insert(animation.layers, {
+			filename = "__reskins-assets-bobs__/graphics/entity/heat-exchanger/heat-pipes/"
+				.. material
+				.. "/heat-pipe-remnants-base.png",
+			line_length = 1,
+			width = 272,
+			height = 262,
+			direction_count = 4,
+			shift = util.by_pixel(0.5, 8),
+			scale = 0.5,
+		})
+	end
+
 	return _sprites.make_rotated_animation_variations_from_spritesheet(1, animation)
 end
 
@@ -213,12 +255,15 @@ end
 ---@param tier integer # 1-6 are supported, 0 to disable
 ---@param tint? data.Color
 ---@param make_tier_labels? boolean
-return function(name, tier, tint, make_tier_labels)
+---@param material? string
+return function(name, tier, tint, make_tier_labels, material)
+	material = material or "base"
+
 	---@type SetupStandardEntityInputs
 	local inputs = {
 		type = "assembling-machine",
 		icon_name = "heat-exchanger",
-		icon_base = "heat-exchanger-base",
+		icon_base = "heat-exchanger-" .. material,
 		base_entity_name = "heat-exchanger",
 		graphics_mod = "assets-bobs",
 		particles = { ["big"] = 2, ["medium"] = 1 },
@@ -238,8 +283,20 @@ return function(name, tier, tint, make_tier_labels)
 	local corpse = data.raw["corpse"][entity.corpse]
 
 	-- Reskin corpse
-	corpse.animation = corpse_animation(inputs.tint)
+	corpse.animation = corpse_animation(inputs.tint, material)
 
 	-- Reskin entity
-	entity.graphics_set.animation = entity_animation(inputs.tint)
+	entity.graphics_set.animation = entity_animation(inputs.tint, material)
+
+	if entity.energy_source and material ~= "base" then
+		entity.energy_source.pipe_covers = _sprites.make_4way_animation_from_spritesheet({
+			filename = "__reskins-assets-bobs__/graphics/entity/heat-exchanger/heat-pipes/"
+				.. material
+				.. "/heat-pipe-endings.png",
+			width = 64,
+			height = 64,
+			direction_count = 4,
+			scale = 0.5,
+		})
+	end
 end

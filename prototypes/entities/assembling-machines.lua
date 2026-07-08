@@ -87,32 +87,32 @@ local entities = {
 	["nullius-medium-assembler-1"] = {
 		type = "assembling-machine",
 		tier = 1,
-		prog_tier = 1,
+		prog_tier = 2,
 		machine_tier = 2, -- crafting speed: 1
 	},
 	["nullius-medium-assembler-2"] = {
 		type = "assembling-machine",
 		tier = 2,
-		prog_tier = 2,
+		prog_tier = 3,
 		machine_tier = 3, -- crafting speed: 2
 	},
 	["nullius-medium-assembler-3"] = {
 		type = "assembling-machine",
 		tier = 3,
-		prog_tier = 3,
+		prog_tier = 4,
 		machine_tier = 4, -- crafting speed: 4
 	},
 	["nullius-large-assembler-1"] = {
 		type = "assembling-machine",
 		tier = 1,
-		prog_tier = 2,
+		prog_tier = 4,
 		machine_tier = 5, -- crafting speed: 4
 		scale_factor = 4 / 3,
 	},
 	["nullius-large-assembler-2"] = {
 		type = "assembling-machine",
 		tier = 2,
-		prog_tier = 3,
+		prog_tier = 5,
 		machine_tier = 6, -- crafting speed: 8
 		scale_factor = 4 / 3,
 	},
@@ -159,7 +159,7 @@ for name, options in pairs(entities) do
 	local deferrable_icon = {
 		name = name,
 		type_name = options.type,
-		icon_data = _framework.tiers.add_tier_labels_to_icons(tier, icon),
+		icon_data = _lib.add_tier_labels_to_icons(tier, icon),
 	}
 
 	_assets.icons.assign_deferrable_icon(deferrable_icon)

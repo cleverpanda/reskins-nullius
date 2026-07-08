@@ -8,6 +8,10 @@ local sprite_utils = {
 	sprites = require("__reskins-sprite-utils__.sprites"),
 }
 
+local _library = {
+	settings = require("__reskins-library__.api.settings"),
+}
+
 local _framework = {
 	tiers = require("__reskins-framework__.api.tiers"),
 }
@@ -24,6 +28,102 @@ local asset_mod_names = {
 	["assets-base"] = { directory = "__reskins-assets-base__" },
 	["assets-bobs"] = { directory = "__reskins-assets-bobs__" },
 }
+
+function lib.is_scope_enabled(scope)
+	return _library.settings.get_value("reskins-lib-scope-" .. scope) ~= false
+end
+
+function lib.get_setting(name)
+	return _library.settings.get_value(name)
+end
+
+function lib.clear_icon_fields(prototype)
+	prototype.icon = nil
+	prototype.icon_size = nil
+	prototype.icons = nil
+end
+
+function lib.assign_icons_to_prototype(type_name, name, icon_data)
+	local prototype =
+		data.raw[type_name]
+		and data.raw[type_name][name]
+
+	if not prototype then
+		return
+	end
+
+	lib.clear_icon_fields(prototype)
+	prototype.icons = util.table.deepcopy(icon_data)
+end
+
+function lib.get_tier_tint(tier)
+	return _framework.tiers.get_tint(tier)
+end
+
+function lib.scaled_pixel(x, y, scale)
+	return util.by_pixel(x * scale, y * scale)
+end
+
+function lib.is_tier_labeling_enabled()
+	return _library.settings.get_value("reskins-lib-icon-tier-labeling") ~= false
+end
+
+function lib.add_tier_labels_to_icons(tier, icon_data)
+	if not lib.is_tier_labeling_enabled() then
+		return util.copy(icon_data)
+	end
+
+	return _framework.tiers.add_tier_labels_to_icons(tier, icon_data)
+end
+
+function lib.add_tier_labels_to_prototype(tier, prototype)
+	if not lib.is_tier_labeling_enabled() then
+		return
+	end
+
+	_framework.tiers.add_tier_labels_to_prototype(tier, prototype)
+end
+
+function lib.make_layered_icon(path, tint, scale, icon_size, mipmap_count)
+	local size = icon_size or 64
+
+	return {
+		{
+			icon = path .. "base.png",
+			icon_size = size,
+			mipmap_count = mipmap_count,
+			scale = scale,
+		},
+		{
+			icon = path .. "mask.png",
+			icon_size = size,
+			mipmap_count = mipmap_count,
+			scale = scale,
+			tint = tint,
+		},
+		{
+			icon = path .. "highlights.png",
+			icon_size = size,
+			mipmap_count = mipmap_count,
+			scale = scale,
+		},
+	}
+end
+
+function lib.make_boxed_icon(icon, scale)
+	local boxed_icon = {
+		{
+			icon = "__nullius__/graphics/icons/crate.png",
+			icon_size = 64,
+		},
+	}
+
+	for _, layer in ipairs(sprite_utils.icons.scale_icon(icon, scale or 0.9)) do
+		boxed_icon[#boxed_icon + 1] = layer
+	end
+
+	return boxed_icon
+end
 
 ---------------------------------------------------------------------------------------------------
 -- functions.lua
@@ -356,6 +456,10 @@ lib.particle_index = {
 ---@param name string # The name of the technology prototype.
 ---@param inputs ConstructTechnologyIconInputsOld
 function lib.construct_technology_icon(name, inputs)
+	if not lib.is_scope_enabled("technologies") then
+		return
+	end
+
 	---@type ConstructTechnologyIconInputsOld
 	local inputs_copy = util.copy(inputs)
 
@@ -613,6 +717,10 @@ end
 ---@param tier integer # The tier of the added labels. An integer value from 0 to 6.
 ---@param inputs ConstructIconInputsOld
 function lib.construct_icon(name, tier, inputs)
+	if not lib.is_scope_enabled("items-and-fluids") then
+		return
+	end
+
 	---@type ConstructIconInputsOld
 	local inputs_copy = util.copy(inputs)
 
@@ -733,7 +841,7 @@ function lib.construct_icon(name, tier, inputs)
 	local deferrable_icon = {
 		name = name,
 		type_name = inputs_copy.type or "item",
-		icon_data = inputs_copy.tier_labels and _framework.tiers.add_tier_labels_to_icons(tier, icon_data) or icon_data,
+		icon_data = inputs_copy.tier_labels and lib.add_tier_labels_to_icons(tier, icon_data) or icon_data,
 		pictures = pictures,
 	}
 

@@ -1,7 +1,20 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.1.4
-Date: ????
+Version: 0.1.5
+Date: 2026-07-08
+  Features:
+    - Added support for beacons, hangars, relays, labs, heat pipes, chargers, drone launchers, drone carriers, and mining drills.
+    - Added tall drill graphics and icons for Nullius large miners
+    - Added custom graphics for solar collectors and thermal tanks
+    - Added support for equipment and equipment-adjacent icons, recipes, and technologies, including leg augmentations, night vision, generator equipment, self-repair packs
+    - Added layered Nullius-specific graphics for labs, large tanks, small tanks.
+    - Added reskinned technology and checkpoint graphics for labs, large tanks, thermal tanks, mining drills, heat pipes, Stirling engines, large beacons, pumps, air filters, flotation cells, electrolyzers, geothermal power, exploration, sensors, solar collectors, and solar power milestones.
+    - Added generated pipe graphics for heat exchangers and solar collectors using shared pipe assets, including generated collector end caps.
   Changes:
+    - Revised tier color defaults so tiers 4, 5, and 6 are green, purple, and orange.
+    - Revised heat exchanger graphics to use shared base and Bob asset-pack pipe graphics
+    - Revised compressor tints to use tier colors
+    - Consolidated repeated icon, tier label, scope, and technology helper code into common helpers.
+
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.3
 Date: 2026-06-08
